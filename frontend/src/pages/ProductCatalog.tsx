@@ -2,7 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductCard } from "../components/ProductCard";
 import { FilterBar } from "../components/FilterBar";
+import { CartButton } from "../components/CartButton";
+import { CartModal } from "../components/CartModal";
 import { fetchProducts } from "../store/slices/productsSlice";
+import { addToCart } from "../store/slices/cartSlice";
 import { RootState, AppDispatch } from "../store/store";
 import { Product } from "../api/productsApi";
 
@@ -17,8 +20,7 @@ export const ProductCatalog: React.FC = () => {
   }, [dispatch]);
 
   const handleAddToCart = (product: Product) => {
-    // TODO: Implement cart functionality
-    console.log("Adding to cart:", product);
+    dispatch(addToCart(product));
   };
 
   if (status === "loading") {
@@ -61,9 +63,12 @@ export const ProductCatalog: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50">
       <div className="container mx-auto px-4 py-8">
         <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-indigo-800 mb-2">
-            StyleDen Catalog
-          </h1>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-4xl font-bold text-indigo-800">
+              StyleDen Catalog
+            </h1>
+            <CartButton />
+          </div>
           <p className="text-lg text-gray-600">
             Discover the latest fashion trends and styles
           </p>
@@ -96,6 +101,9 @@ export const ProductCatalog: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Cart Modal */}
+      <CartModal />
     </div>
   );
 };

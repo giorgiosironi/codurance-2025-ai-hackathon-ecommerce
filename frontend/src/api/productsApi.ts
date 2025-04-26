@@ -24,4 +24,8 @@ export const productsApi = {
     const response = await axios.get(`${API_BASE_URL}/products`);
     return response.data;
   },
+
+  getProductImageUrl: (productId: number): string => {
+    return `${API_BASE_URL}/images/${productId}`;
+  },
 };
