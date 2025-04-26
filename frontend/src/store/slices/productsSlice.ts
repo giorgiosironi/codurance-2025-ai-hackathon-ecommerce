@@ -1,22 +1,29 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { productsApi, Product, ProductsResponse } from "../../api/productsApi";
+import {
+  productsApi,
+  Product,
+  ProductsResponse,
+  FilterParams,
+} from "../../api/productsApi";
 
 export interface ProductsState {
   items: Product[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
+  filters: FilterParams;
 }
 
 const initialState: ProductsState = {
   items: [],
   status: "idle",
   error: null,
+  filters: {},
 };
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async () => {
-    const response = await productsApi.getProducts();
+  async (filters?: FilterParams) => {
+    const response = await productsApi.getProducts(filters);
     return response;
   }
 );
@@ -24,7 +31,14 @@ export const fetchProducts = createAsyncThunk(
 const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    setFilters: (state, action) => {
+      state.filters = action.payload;
+    },
+    clearFilters: (state) => {
+      state.filters = {};
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
@@ -41,4 +55,5 @@ const productsSlice = createSlice({
   },
 });
 
+export const { setFilters, clearFilters } = productsSlice.actions;
 export default productsSlice.reducer;

@@ -11,13 +11,13 @@ import { Product } from "../api/productsApi";
 
 export const ProductCatalog: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { items, status, error } = useSelector(
+  const { items, status, error, filters } = useSelector(
     (state: RootState) => state.products
   );
 
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    dispatch(fetchProducts(filters));
+  }, [dispatch, filters]);
 
   const handleAddToCart = (product: Product) => {
     dispatch(addToCart(product));
@@ -49,7 +49,7 @@ export const ProductCatalog: React.FC = () => {
           </h2>
           <p className="text-red-600 mb-4">{error}</p>
           <button
-            onClick={() => dispatch(fetchProducts())}
+            onClick={() => dispatch(fetchProducts(filters))}
             className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors duration-300"
           >
             Try Again
