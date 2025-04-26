@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, send_file
+from flask import Flask, jsonify, send_file, request
 from flask_cors import CORS
 import pandas as pd
 import os
@@ -18,6 +18,15 @@ def hello_world():
 def get_products():
     # Read the CSV file, skipping the header row
     df = pd.read_csv(CSV_PATH, nrows=20)
+    
+    # Apply filters if query parameters are present
+    filters = request.args.to_dict()
+    if filters:
+        mask = pd.Series(True, index=df.index)
+        for key, value in filters.items():
+            if key in df.columns:
+                mask &= (df[key] == value)
+        df = df[mask]
     
     # Convert the DataFrame to a list of dictionaries
     products = df.to_dict('records')
