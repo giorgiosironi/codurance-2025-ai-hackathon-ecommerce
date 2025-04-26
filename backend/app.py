@@ -1,8 +1,10 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 import pandas as pd
 import os
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 # Load the CSV file
 CSV_PATH = os.path.join(os.path.dirname(__file__), 'styles.csv')
