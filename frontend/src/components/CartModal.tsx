@@ -5,6 +5,7 @@ import {
   removeFromCart,
   updateQuantity,
   clearCart,
+  toggleCart,
 } from "../store/slices/cartSlice";
 import { productsApi } from "../api/productsApi";
 
@@ -17,19 +18,51 @@ export const CartModal: React.FC = () => {
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = items.reduce((sum, item) => sum + item.quantity, 0);
 
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    // Only close if clicking directly on the backdrop
+    if (e.target === e.currentTarget) {
+      dispatch(toggleCart());
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      onClick={handleBackdropClick}
+    >
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden">
         <div className="p-4 bg-gradient-to-r from-purple-500 to-indigo-600 text-white flex justify-between items-center">
           <h2 className="text-xl font-bold">
             Shopping Cart ({totalItems} items)
           </h2>
-          <button
-            onClick={() => dispatch(clearCart())}
-            className="text-white hover:text-red-200 transition-colors"
-          >
-            Clear Cart
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => dispatch(clearCart())}
+              className="text-white hover:text-red-200 transition-colors bg-red-500 hover:bg-red-600 px-3 py-1 rounded-md"
+            >
+              Clear Cart
+            </button>
+            <button
+              onClick={() => dispatch(toggleCart())}
+              className="text-white hover:text-gray-200 transition-colors bg-red-500 hover:bg-red-600 p-1 rounded-md"
+              aria-label="Close cart"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div className="p-4 overflow-y-auto max-h-[60vh]">
