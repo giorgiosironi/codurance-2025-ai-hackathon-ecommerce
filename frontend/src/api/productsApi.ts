@@ -2,33 +2,26 @@ import axios from "axios";
 
 export interface Product {
   id: number;
-  name: string;
-  price: number;
-  category: string;
-  image: string;
-  brand: string;
-  year: number;
+  productDisplayName: string;
+  masterCategory: string;
+  subCategory: string;
+  articleType: string;
+  baseColour: string;
+  gender: string;
   season: string;
+  year: number;
+  usage: string;
 }
 
 export interface ProductsResponse {
   items: Product[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
 }
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "http://localhost:5000";
 
 export const productsApi = {
-  getProducts: async (
-    page: number = 1,
-    pageSize: number = 12
-  ): Promise<ProductsResponse> => {
-    const response = await axios.get(`${API_BASE_URL}/products`, {
-      params: { page, pageSize },
-    });
+  getProducts: async (): Promise<ProductsResponse> => {
+    const response = await axios.get(`${API_BASE_URL}/products`);
     return response.data;
   },
 };

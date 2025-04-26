@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductCard } from "../components/ProductCard";
 import { fetchProducts } from "../store/slices/productsSlice";
@@ -7,14 +7,13 @@ import { Product } from "../api/productsApi";
 
 export const ProductCatalog: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { items, status, error, page, totalPages } = useSelector(
+  const { items, status, error } = useSelector(
     (state: RootState) => state.products
   );
-  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchProducts({ page: currentPage, pageSize: 12 }));
-  }, [dispatch, currentPage]);
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   const handleAddToCart = (product: Product) => {
     // TODO: Implement cart functionality
@@ -50,29 +49,6 @@ export const ProductCatalog: React.FC = () => {
             onAddToCart={handleAddToCart}
           />
         ))}
-      </div>
-
-      {/* Pagination */}
-      <div className="flex justify-center items-center mt-8 space-x-2">
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className="px-4 py-2 border rounded-md disabled:opacity-50"
-        >
-          Previous
-        </button>
-        <span className="px-4 py-2">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 border rounded-md disabled:opacity-50"
-        >
-          Next
-        </button>
       </div>
     </div>
   );

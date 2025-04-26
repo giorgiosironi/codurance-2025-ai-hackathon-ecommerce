@@ -1,16 +1,19 @@
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { ProductCard } from "./ProductCard";
 
 const mockProduct = {
   id: 1,
-  name: "Test Product",
-  price: 99.99,
-  category: "Test Category",
-  image: "test-image.jpg",
-  brand: "Test Brand",
+  productDisplayName: "Test Product",
+  masterCategory: "Apparel",
+  subCategory: "Topwear",
+  articleType: "Tshirts",
+  baseColour: "Blue",
+  gender: "Men",
+  season: "Summer",
   year: 2024,
-  season: "Spring",
+  usage: "Casual",
 };
 
 describe("ProductCard", () => {
@@ -19,12 +22,15 @@ describe("ProductCard", () => {
     render(<ProductCard product={mockProduct} onAddToCart={mockAddToCart} />);
 
     expect(screen.getByText("Test Product")).toBeInTheDocument();
-    expect(screen.getByText("Test Category")).toBeInTheDocument();
-    expect(screen.getByText("$99.99")).toBeInTheDocument();
-    expect(screen.getByAltText("Test Product")).toHaveAttribute(
-      "src",
-      "test-image.jpg"
-    );
+    expect(
+      screen.getByText(/Category: Apparel - Topwear/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Type: Tshirts/i)).toBeInTheDocument();
+    expect(screen.getByText(/Color: Blue/i)).toBeInTheDocument();
+    expect(screen.getByText(/Gender: Men/i)).toBeInTheDocument();
+    expect(screen.getByText(/Season: Summer/i)).toBeInTheDocument();
+    expect(screen.getByText(/Year: 2024/i)).toBeInTheDocument();
+    expect(screen.getByText("Casual")).toBeInTheDocument();
   });
 
   it("calls onAddToCart when Add to Cart button is clicked", () => {
