@@ -1,2 +1,5 @@
 /venv
 __pycache__
+/images/*
+.pytest_cache
+styles.csv
